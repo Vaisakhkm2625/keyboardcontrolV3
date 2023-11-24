@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "keyboardcontrolv3"
+version = "0.1.0"
+description = ""
+authors = ["Vaisakh K M <vaisakhkm2625@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyqt6-tools = "^6.4.2.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
