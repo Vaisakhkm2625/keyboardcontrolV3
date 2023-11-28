@@ -1,24 +1,32 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtGui import QIcon
 
+from ui.main_ui import Ui_MainWindow
 
+class Application(QApplication):
 
-class Window(QWidget):
+    def __init__(self, argv):
+        super().__init__(argv)
+
+        #apply_stylesheet(self, theme='dark_teal.xml')
+        self.window = MainWindow()
+        self.window.show()
+
+class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("hello")
-        self.setGeometry(150,150,500,500)
-        self.setWindowIcon(QIcon("icons/list.png"))
-        self.setStyleSheet("background-color:red")
-        self.setWindowOpacity(0.7)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
 
-app = QApplication(sys.argv)
 
-window = Window()
-window.show()
 
-sys.exit(app.exec())
+
+
+
+if __name__ == "__main__":
+    app = Application(sys.argv)
+    sys.exit(app.exec())
