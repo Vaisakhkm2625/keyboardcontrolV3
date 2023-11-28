@@ -1,13 +1,20 @@
 [tool.poetry]
-name = "keyboardcontrolv3"
+name = "keyboardcontrol"
 version = "0.1.0"
-description = ""
+description = "An app for configuring keymaps across systems"
 authors = ["Vaisakh K M <vaisakhkm2625@gmail.com>"]
+license = "Mit"
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pyyaml = "^6.0.1"
+xremap = "^0.1.0"
 pyqt6-tools = "^6.4.2.3.3"
+keyboard = "^0.13.5"
+qt-material = "^2.14"
+yapsy = "^1.12.2"
+pyqt6-plugins = {version = "^6.4.2.2.3", platform = "linux"}
 
 
 [build-system]
