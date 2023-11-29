@@ -1,8 +1,16 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget
 from PyQt6.QtGui import QIcon
 
 from ui.main_ui import Ui_MainWindow
+
+
+from item import Item
+
+class Manager:
+    def __init__(self):
+        self.item_list = []
+
 
 class Application(QApplication):
 
@@ -21,9 +29,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-
-
-
+        pushbut = QPushButton()
 
 
 
