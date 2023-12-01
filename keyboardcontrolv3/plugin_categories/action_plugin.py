@@ -15,7 +15,3 @@ class Action(object):
     def run_action(self):
         print("plugin action running")
 
-
-
-
-

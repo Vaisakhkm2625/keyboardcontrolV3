@@ -62,51 +62,46 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="2">
-        <widget class="QWidget" name="event_list_area" native="true">
+       <item row="0" column="1">
+        <widget class="QStackedWidget" name="actions_area">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color:red;</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QScrollArea" name="scrollArea">
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
-            <widget class="QWidget" name="scrollAreaWidgetContents">
-             <property name="geometry">
-              <rect>
-               <x>0</x>
-               <y>0</y>
-               <width>280</width>
-               <height>417</height>
-              </rect>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_3">
-              <item>
-               <widget class="QListWidget" name="listWidget"/>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QStackedWidget" name="actions_stacked_widget_area">
-         <property name="styleSheet">
           <string notr="true">background-color:blue;
 </string>
          </property>
-         <widget class="QWidget" name="page_3"/>
-         <widget class="QWidget" name="page_4"/>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QScrollArea" name="event_area">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>273</width>
+            <height>435</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>248</width>
+            <height>0</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QListWidget" name="event_list"/>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
        <item row="1" column="2">
@@ -116,17 +111,51 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" rowspan="2">
-        <widget class="QWidget" name="sidebar" native="true">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="sidebar__area">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>100</width>
            <height>0</height>
           </size>
          </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: green;</string>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
          </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_3">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>198</width>
+            <height>435</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QListWidget" name="item_list">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>

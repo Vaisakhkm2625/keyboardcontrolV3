@@ -1,4 +1,5 @@
 
+
 class Item:
 
     def __init__(self):
@@ -10,6 +11,3 @@ class Item:
 
         self.trigger_list = [
         ]
-
-
-

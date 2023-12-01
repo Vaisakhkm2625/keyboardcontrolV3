@@ -1,0 +1,8 @@
+[Core]
+Name = keyboard event
+Module = keyboard_event
+
+[Documentation]
+Author = Vaisakh
+Version = 0.1
+Description = plugin to keyboard event trigger
