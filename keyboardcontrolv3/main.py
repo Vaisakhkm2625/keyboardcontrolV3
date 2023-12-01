@@ -15,8 +15,6 @@ from ui.main_ui import Ui_MainWindow
 import logging
 from item import Item
 
-
-
 ### Global variables
 PLUGIN_LOCATION = 'keyboardcontrolv3/plugins'
 
@@ -29,69 +27,47 @@ logging.basicConfig(format=log_format)
 logger = logging.getLogger("keyboardcontrolv3_logger_inst")
 #logger.addHandler(logging.StreamHandler(sys.stdout))
 logger.setLevel(logging.DEBUG)
- 
-
 
 class Manager:
     item_list: list[dict]
 
-    action_plugin_list: list[object]
-    event_plugin_list: list[object]
+    plugin_manager: PluginManager
+
 
     def __init__(self,ui):
         logger.info("Manager initiating....")
 
         self.ui = ui
-        self.action_plugin_list =[]
-        self.event_plugin_list =[]
         self.item_list=[]
 
-        self.load_action_plugins()
-        self.load_event_plugins()
+        self.load_plugins()
         self.load_items()
 
-    def load_action_plugins(self):
 
-        action_plugin_manager = PluginManager(categories_filter={"Action":Action},plugin_info_ext="kb-plugin")
-        action_plugin_manager.setPluginPlaces([PLUGIN_LOCATION])
-        action_plugin_manager.collectPlugins()
+    def load_plugins(self):
 
-        for action_plugin in action_plugin_manager.getAllPlugins():
+        self.plugin_manager = PluginManager(categories_filter={"Action":Action,"Event":Event},plugin_info_ext="kb-plugin")
+        self.plugin_manager.setPluginPlaces([PLUGIN_LOCATION])
+        self.plugin_manager.collectPlugins()
 
-            logger.info(f"Plugin {action_plugin.name} loading")
-            self.action_plugin_list.append(action_plugin)
+        for action_plugin in self.plugin_manager.getPluginsOfCategory("Action"):
+           logger.info(f"setting ui for action plugin {action_plugin.name}")
 
-            ui_widget = action_plugin.plugin_object.get_ui_widget()
-            action_plugin.ui_index = self.ui.actions_area.addWidget(ui_widget())
-
-
-        #testing of loading
-        print(self.action_plugin_list)
-        self.action_plugin_list[0].plugin_object.set_data(data = {"hello":"hi"})
-        print("from action",action_plugin_manager.getPluginByName("applications", category='Action').plugin_object.data)
-        print("action plugins -> ",action_plugin_manager.getPluginsOfCategory("Action"))
+           ui_widget = action_plugin.plugin_object.get_ui_widget()
+           action_plugin.ui_index = self.ui.actions_area.addWidget(ui_widget())
 
 
 
-    def load_event_plugins(self):
 
-        event_plugin_manager = PluginManager(categories_filter={"Event":Event},plugin_info_ext="kb-plugin")
-        event_plugin_manager.setPluginPlaces([PLUGIN_LOCATION])
-        event_plugin_manager.collectPlugins()
-
-        for event_plugin in event_plugin_manager.getAllPlugins():
-
-            logger.info(f"Plugin {event_plugin.name} loading")
-            self.event_plugin_list.append(event_plugin)
-
-            #plugin.plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
-            #self.ui.sidebar.setLayout(a)
-            #self.action_plugin_list.append(plugin.name)
-            #self.ui.actions_area.setCurrentIndex(self.action_plugin_list.index(plugin.name))
-            #self.action_plugin_list[1].plugin_object.run_action()
-
-            #plugin.plugin_object.run_action()
-            #QListWidgetItem(plugin.name, self.ui.sidebar)
+ #-------print("from action",action_plugin_manager.getPluginByName("applications", category='Action').plugin_object.data)
+ #           plugin.plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
+ #           self.ui.sidebar.setLayout(a)
+ #           self.action_plugin_list.append(plugin.name)
+ #           self.ui.actions_area.setCurrentIndex(self.action_plugin_list.index(plugin.name))
+ #           self.action_plugin_list[1].plugin_object.run_action()
+  
+ #           plugin.plugin_object.run_action()
+ #           QListWidgetItem(plugin.name, self.ui.sidebar)
 
     #def add_action_plugin(self):
 
@@ -99,10 +75,15 @@ class Manager:
     def load_items(self):
         self.item_list = []
 
-
         a = Item()
+        a.name = "easyeffects"
         a.action_type = "application"
+        a.description = "open easyeffects"
+        a.action_data = { }
 
+
+    def show_item_ui(self):
+        pass
 
     def read_data(self):
         pass
@@ -134,8 +115,6 @@ class MainWindow(QMainWindow):
 
         self.ui.apply.clicked.connect(self.run_some)
         self.manager = Manager(self.ui)
-
-
 
     def run_some(self):
             self.action_plugin_list[0].plugin_object.run_action()
