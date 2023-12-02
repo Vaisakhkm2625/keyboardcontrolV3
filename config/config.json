@@ -1,0 +1,18 @@
+[
+    {
+        "name": "easyeffects",
+        "action_type": "applications",
+        "description": "open easyeffects",
+        "action_data": {
+            "application_name": "easyeffects"
+        }
+    },
+    {
+        "name": "firefox",
+        "action_type": "applications",
+        "description": "open firefox",
+        "action_data": {
+            "application_name": "firefox"
+        }
+    }
+]

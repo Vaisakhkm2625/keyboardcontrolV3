@@ -30,19 +30,13 @@ class ApplicationPlugin(Action):
     def __init__(self):
         super().__init__()
         print("app plugin loaded")
-        self.data = {}
 
     def get_ui_widget(self):
         return ApplicationUiWidget
 
-    def set_data(self,data):
-        self.data = data
-
-
-    def run_action(self):
-        print("running")
-        print(self.data)
+    def run_action(self,data):
+        print("running application plugin >",data["application_name"])
 
         import subprocess
-        process = subprocess.Popen(self.data["application_name"])
+        process = subprocess.Popen(data["application_name"])
 
