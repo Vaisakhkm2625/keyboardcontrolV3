@@ -1,0 +1,8 @@
+[Core]
+Name = python_scripts
+Module = python_scripts
+
+[Documentation]
+Author = Vaisakh
+Version = 0.1
+Description = plugin to launch python scripts
