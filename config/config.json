@@ -14,5 +14,13 @@
         "action_data": {
             "application_name": "firefox"
         }
+    },
+    {
+        "name": "senthi ",
+        "action_type": "python_scripts",
+        "description": "sent hi with python",
+        "action_data": {
+            "script_location": "config/sent_hi.py"
+        }
     }
 ]
