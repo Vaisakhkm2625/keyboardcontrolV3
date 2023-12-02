@@ -5,6 +5,7 @@ import sys,json
 from PyQt6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget
 from PyQt6.QtGui import QIcon
 
+
 from yapsy.PluginManager import PluginManager
 from plugin_categories.action_plugin import Action 
 from plugin_categories.event_plugin import Event
@@ -44,6 +45,9 @@ class Manager:
 
         self.ui.item_list.currentRowChanged.connect(self.show_item_ui)
 
+        self.ui.tryaction.clicked.connect(self.run_current_item_action)
+
+        
 
     def load_plugins(self):
 
@@ -110,6 +114,21 @@ class Manager:
 
         for item in self.item_list:
             self.ui.item_list.addItem(QListWidgetItem(item.name))
+
+
+    def run_action_by_item_index(self,index):
+
+        item = self.item_list[index]
+        action_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
+        action_plugin.plugin_object.run_action(item.action_data)
+
+
+    def run_current_item_action(self):
+        current_item_index = self.ui.item_list.currentRow()
+        self.run_action_by_item_index(current_item_index)
+
+    
+
 
     def read_data(self):
         pass
