@@ -5,6 +5,7 @@ import sys,json
 from PyQt6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget
 from PyQt6.QtGui import QIcon
 
+from qt_material import apply_stylesheet
 
 from yapsy.PluginManager import PluginManager
 from plugin_categories.action_plugin import Action 
@@ -143,7 +144,7 @@ class Application(QApplication):
     def __init__(self, argv):
         super().__init__(argv)
 
-        #apply_stylesheet(self, theme='dark_teal.xml')
+        apply_stylesheet(self, theme='dark_teal.xml')
 
         self.window = MainWindow()
         self.window.show()
