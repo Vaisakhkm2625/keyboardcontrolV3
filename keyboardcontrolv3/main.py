@@ -30,8 +30,8 @@ logger = logging.getLogger("keyboardcontrolv3_logger_inst")
 logger.setLevel(logging.DEBUG)
 
 class Manager:
-    item_list: list[Item]
 
+    item_list: list[Item]
     plugin_manager: PluginManager
 
 
@@ -48,7 +48,7 @@ class Manager:
 
         self.ui.tryaction.clicked.connect(self.run_current_item_action)
 
-        
+        self.run_events()
 
     def load_plugins(self):
 
@@ -125,13 +125,27 @@ class Manager:
 
 
     def run_current_item_action(self):
+
         current_item_index = self.ui.item_list.currentRow()
         self.run_action_by_item_index(current_item_index)
 
-    
+
+    def run_events(self):
+
+        #event_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
+
+        event_plugin = self.plugin_manager.getPluginByName("sheduler_event", category='Event')
+
+
+        event_plugin.set_data_mappings( id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 05:40:21.461000"}}])
+        event_plugin.start_event_listener(self.read_data)
+        event_plugin.stop_event_listener()
+
+
 
 
     def read_data(self):
+        print("hello from crazy plugin")
         pass
 
     def save_data(self):

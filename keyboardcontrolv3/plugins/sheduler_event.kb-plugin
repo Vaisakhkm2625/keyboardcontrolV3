@@ -1,0 +1,8 @@
+[Core]
+Name = sheduler_event
+Module = sheduler_event
+
+[Documentation]
+Author = Vaisakh
+Version = 0.1
+Description = time based event plugin

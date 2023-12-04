@@ -5,7 +5,27 @@
         "description": "open easyeffects",
         "action_data": {
             "application_name": "easyeffects"
-        }
+        },
+        "event_list": [
+            {
+                "type": "keybord_shortcut",
+                "data": {
+                    "shortcut": "ctrl+x"
+                }
+            },
+            {
+                "type": "keybord_shortcut",
+                "data": {
+                    "shortcut": "ctrl+j"
+                }
+            },
+            {
+                "type": "schedule",
+                "data": {
+                    "schedule": "ctrl+j"
+                }
+            }
+        ]
     },
     {
         "name": "firefox",
