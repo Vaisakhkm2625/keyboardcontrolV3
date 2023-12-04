@@ -8,13 +8,13 @@
         },
         "event_list": [
             {
-                "type": "keybord_shortcut",
+                "type": "keyboard event",
                 "data": {
                     "shortcut": "ctrl+x"
                 }
             },
             {
-                "type": "keybord_shortcut",
+                "type": "keyboard event",
                 "data": {
                     "shortcut": "ctrl+j"
                 }
@@ -36,13 +36,13 @@
         },
         "event_list": [
             {
-                "type": "keybord_shortcut",
+                "type": "keyboard event",
                 "data": {
                     "shortcut": "ctrl+x"
                 }
             },
             {
-                "type": "keybord_shortcut",
+                "type": "keyboard event",
                 "data": {
                     "shortcut": "ctrl+j"
                 }
@@ -70,13 +70,13 @@
         },
         "event_list": [
             {
-                "type": "keybord_shortcut",
+                "type": "keyboard event",
                 "data": {
                     "shortcut": "ctrl+x"
                 }
             },
             {
-                "type": "keybord_shortcut",
+                "type": "keyboard event",
                 "data": {
                     "shortcut": "ctrl+j"
                 }

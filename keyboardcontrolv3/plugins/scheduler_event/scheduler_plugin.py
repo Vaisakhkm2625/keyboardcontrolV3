@@ -19,7 +19,7 @@ class SchedulerWorker(QThread):
 class SchedulerUiWidget(QWidget):
 
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         self.data = {}
 
         self.date_time_edit = QDateTimeEdit(self)
@@ -31,12 +31,12 @@ class SchedulerUiWidget(QWidget):
         self.date_time_edit.dateTimeChanged.connect(self.datetime_changed)
         self.setLayout(self.vbox)
 
-    def get_data(self):
+    def get_ui_data(self):
 
         self.data["scheduled_time"]=self.date_time_edit.dateTime().toPyDateTime()
         return self.data
 
-    def set_data(self,data):
+    def set_ui_data(self,data):
         self.data = data
         #self.date_time_edit.setDateTime(QDateTime.currentDateTime())
 

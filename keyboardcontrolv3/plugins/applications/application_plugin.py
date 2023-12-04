@@ -24,6 +24,7 @@ class ApplicationUiWidget(QWidget):
 
     def get_ui_data(self):
         self.data["application_name"] = self.application_name.text()
+        return self.data
 
 
 class ApplicationPlugin(Action):

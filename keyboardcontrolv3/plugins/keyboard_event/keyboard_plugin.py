@@ -1,22 +1,27 @@
 
-from PyQt6.QtWidgets import QKeySequenceEdit, QWidget
+from PyQt6.QtWidgets import  QKeySequenceEdit, QVBoxLayout, QWidget
 from plugin_categories.event_plugin import Event
 
 class KeyboardUiWidget(QWidget):
 
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         self.data = {}
         self.keyedit = QKeySequenceEdit()
 
-    def get_data(self):
-        self.data["key_sequence"] = self.keyedit.keySequence.keySequence().toString()
+        self.vbox = QVBoxLayout()
+        self.vbox.addWidget(self.keyedit)
+
+        self.setLayout(self.vbox)
+
+    def get_ui_data(self):
+        self.data["shortcut"] = self.keyedit.keySequence().toString()
         return self.data
 
-    def set_data(self,data):
+    def set_ui_data(self,data):
         self.data = data
-        self.keyedit.setKeySequence(self.data["key_sequence"])
-        return self.data
+        print("setting keyboard data",self.data)
+        self.keyedit.setKeySequence(self.data["shortcut"])
 
 
 class KeyboardEventPlugin(Event):
@@ -26,10 +31,13 @@ class KeyboardEventPlugin(Event):
         self.key_mappings = []
 
     def get_ui_widget(self):
-        return KeyboardEventPlugin 
+        return KeyboardUiWidget
 
-    def registor_id_data(self, id, data={}):
-        self.key_mappings.append({"id":data})
+    def set_data_mappings(self, id_mappings=[]):
+        #self.key_mappings.append({"id":data})
+        self.key_mappings = id_mappings
+        print("keyboard mapping ->",self.key_mappings)
+        
 
     def start_event_listener(self,callback):
         # keyboard press ed > callback

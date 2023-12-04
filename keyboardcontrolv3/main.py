@@ -45,9 +45,11 @@ class Manager:
         self.load_plugins()
         self.load_items()
 
-        self.ui.item_list.currentRowChanged.connect(self.show_item_ui)
+        self.ui.item_list.currentRowChanged.connect(self.item_selected)
 
         self.ui.tryaction.clicked.connect(self.run_current_item_action)
+
+        self.ui.apply.clicked.connect(self.apply_changes)
 
         self.run_events()
 
@@ -58,46 +60,55 @@ class Manager:
         self.plugin_manager.collectPlugins()
 
         for action_plugin in self.plugin_manager.getPluginsOfCategory("Action"):
-           logger.info(f"setting ui for action plugin {action_plugin.name}")
+            logger.info(f"setting ui for action plugin {action_plugin.name}")
 
-           ui_widget = action_plugin.plugin_object.get_ui_widget()
-           action_plugin.ui_index = self.ui.actions_area.addWidget(ui_widget())
+            ui_widget = action_plugin.plugin_object.get_ui_widget()
+            action_plugin.ui_index = self.ui.actions_area.addWidget(ui_widget())
 
 
         #print("index me",self.plugin_manager.getPluginByName( "applications",category="Action")dd)
 
+    #-------print("from action",action_plugin_manager.getPluginByName("applications", category='Action').plugin_object.data)
+    #           plugin.plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
+    #           self.ui.sidebar.setLayout(a)
+    #           self.action_plugin_list.append(plugin.name)
+    #           self.ui.actions_area.setCurrentIndex(self.action_plugin_list.index(plugin.name))
+    #           self.action_plugin_list[1].plugin_object.run_action()
 
-
- #-------print("from action",action_plugin_manager.getPluginByName("applications", category='Action').plugin_object.data)
- #           plugin.plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
- #           self.ui.sidebar.setLayout(a)
- #           self.action_plugin_list.append(plugin.name)
- #           self.ui.actions_area.setCurrentIndex(self.action_plugin_list.index(plugin.name))
- #           self.action_plugin_list[1].plugin_object.run_action()
-  
- #           plugin.plugin_object.run_action()
- #           QListWidgetItem(plugin.name, self.ui.sidebar)
-
-    #def add_action_plugin(self):
-
+    #           plugin.plugin_object.run_action()
+    #           QListWidgetItem(plugin.name, self.ui.sidebar)
 
     def load_items(self):
         self.item_list = []
 
-        with open('config/config.json', 'r') as json_file:
-            items_data = json.load(json_file)
-            print(items_data)
+        items_data = self.read_config() 
 
         for item_data in items_data:
             item_instance = Item(**item_data)
             self.item_list.append(item_instance)
 
-
         self.update_side_bar()
 
 
-    def show_item_ui(self,itemid = 0):
-        item = self.item_list[itemid]
+    def read_config(self):
+        with open('config/config.json', 'r') as json_file:
+            items_data = json.load(json_file)
+            logger.info("Config file loaded")
+            return items_data
+
+
+    def save_config(self):
+        pass
+        #self.s.enter(int(seconds), 1, callback, (item))
+
+
+    def item_selected(self,item_row):
+        item = self.item_list[item_row]
+        self.set_item_ui_action(item)
+        self.set_item_ui_events(item)
+
+
+    def set_item_ui_action(self,item: Item):
         action_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
 
         logger.debug(f"action ui for {item.name}")
@@ -107,9 +118,60 @@ class Manager:
 
         ## snippet - for running a plugin with item
         # need to handle this in try catch
-        #name = self.item_list[itemid].action_type
-        #action_data = self.item_list[itemid].action_data
+        #name = self.item_list[item_row].action_type
+        #action_data = self.item_list[item_row].action_data
         #self.plugin_manager.getPluginByName(name, category='Action').plugin_object.run_action(action_data)
+
+    def get_current_ui_item(self):
+        itemRow = self.ui.item_list.currentRow()
+        item = self.item_list[itemRow]
+        return item
+
+
+    def set_item_ui_events(self,item: Item):
+
+        self.ui.event_list.clear()
+
+        for event in item.event_list:
+
+            logger.debug(f"type -> { event['type'] }")
+            ui_widget_class = self.plugin_manager.getPluginByName(event["type"], category='Event').plugin_object.get_ui_widget()
+            ui_widget = ui_widget_class()
+            ui_widget.set_ui_data(event["data"])
+            #temp workaround - to get type when retriveing data
+            ui_widget._event_type = event['type']
+
+
+            event_list_item = QListWidgetItem()
+            event_list_item.setSizeHint(ui_widget.sizeHint())  # Set the size hint for proper sizing
+            self.ui.event_list.addItem(event_list_item)
+            self.ui.event_list.setItemWidget(event_list_item,ui_widget)
+
+
+    def apply_changes(self):
+        logger.info("changes applying")
+        item = self.get_current_ui_item()
+
+        ## Action
+        action_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
+        item.action_data = self.ui.actions_area.widget(action_plugin.ui_index).get_ui_data()
+        print(item.action_data)
+
+        ## Event
+        # i am dumb -> should have made a copy item
+        event_list = []
+
+        for i in range(self.ui.event_list.count()):
+            event_list_item = self.ui.event_list.item(i)
+            event_ui_widget= self.ui.event_list.itemWidget(event_list_item)
+            data = event_ui_widget.get_ui_data()
+
+            event = {"type":event_ui_widget._event_type,"data":data}
+            print("event retrived data ->",event)
+            event_list.append(event)
+
+        item.event_list.clear()
+        item.event_list=event_list
 
 
     def update_side_bar(self):
@@ -119,31 +181,34 @@ class Manager:
             self.ui.item_list.addItem(QListWidgetItem(item.name))
 
 
-    def run_action_by_item_index(self,index):
-
-        item = self.item_list[index]
+    def run_action_by_item(self,item):
         action_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
         action_plugin.plugin_object.run_action(item.action_data)
 
 
     def run_current_item_action(self):
-
-        current_item_index = self.ui.item_list.currentRow()
-        self.run_action_by_item_index(current_item_index)
+        self.run_action_by_item(self.get_current_ui_item())
 
 
+        #TODO: Now it's only for scheduler_event
+        # make this loop through all event with getPluginByCatagory("Event")
     def run_events(self):
 
-        #event_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
+        #event_plugin = self.plugin_manager.getPluginByName("scheduler_event", category='Event')
+        event_plugins = self.plugin_manager.getPluginsOfCategory('Event')
 
-        event_plugin = self.plugin_manager.getPluginByName("scheduler_event", category='Event')
 
         #event_plugin.plugin_object.set_data_mappings(id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 07:39:15.276000"}}])
-        event_plugin.plugin_object.set_data_mappings(id_mappings = self.group_by_event("scheduler_event") )
 
-        event_plugin.plugin_object.start_event_listener(self.read_data)
-        event_plugin.plugin_object.stop_event_listener()
+        for event_plugin in event_plugins:
+            
+            event_plugin.plugin_object.set_data_mappings(id_mappings = self.group_by_event(event_plugin.name) )
+            event_plugin.plugin_object.start_event_listener(self.event_callback)
+        #event_plugin.plugin_object.stop_event_listener()
 
+    def event_callback(self,item):
+        print(f"hello from plugin {item}")
+        pass
 
 
     def group_by_event(self,event_name):
@@ -161,16 +226,6 @@ class Manager:
 
         return return_list
 
-
-
-
-    def read_data(self,item):
-        print(f"hello from plugin {item}")
-        pass
-
-    def save_data(self):
-        pass
-        #self.s.enter(int(seconds), 1, callback, (item))
 
 
 class Application(QApplication):
@@ -200,8 +255,8 @@ class MainWindow(QMainWindow):
 
 
     def run_some(self):
-            self.action_plugin_list[0].plugin_object.run_action()
-            self.action_plugin_list[0].plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
+        self.action_plugin_list[0].plugin_object.run_action()
+        self.action_plugin_list[0].plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
 
 
 if __name__ == "__main__":
