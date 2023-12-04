@@ -134,7 +134,7 @@ class Manager:
 
         #event_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
 
-        event_plugin = self.plugin_manager.getPluginByName("sheduler_event", category='Event')
+        event_plugin = self.plugin_manager.getPluginByName("scheduler_event", category='Event')
 
 
         event_plugin.set_data_mappings( id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 05:40:21.461000"}}])

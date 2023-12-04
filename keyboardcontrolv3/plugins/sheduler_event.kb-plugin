@@ -1,6 +1,6 @@
 [Core]
-Name = sheduler_event
-Module = sheduler_event
+Name = scheduler_event
+Module = scheduler_event
 
 [Documentation]
 Author = Vaisakh

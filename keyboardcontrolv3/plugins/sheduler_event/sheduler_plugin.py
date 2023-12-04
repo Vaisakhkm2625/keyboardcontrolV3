@@ -15,7 +15,7 @@ class SchedulerWorker(QThread):
         self.scheduler.run()
 
 
-class ShedulerUiWidget(QWidget):
+class schedulerUiWidget(QWidget):
 
     def __init__(self):
         super().__init__(self)
@@ -55,7 +55,7 @@ class ShedulerUiWidget(QWidget):
 
 
 
-class ShedulerEventPlugin(Event):
+class schedulerEventPlugin(Event):
     def __init__(self):
         super().__init__()
 
@@ -65,7 +65,7 @@ class ShedulerEventPlugin(Event):
         self.worker_thread = SchedulerWorker(self.s)
 
     def get_ui_widget(self):
-        return ShedulerEventPlugin 
+        return schedulerEventPlugin 
 
 
     # [
@@ -83,9 +83,9 @@ class ShedulerEventPlugin(Event):
         print("starting keyboard listenr")
 
         current_time = QDateTime.currentDateTime().toPyDateTime()
-        for sheduled_map in self.schedule_mappings:
-            item = sheduled_map["item"]
-            scheduled_time = sheduled_map["data"]["scheduled_time"]
+        for scheduled_map in self.schedule_mappings:
+            item = scheduled_map["item"]
+            scheduled_time = scheduled_map["data"]["scheduled_time"]
 
             if scheduled_time <= current_time:
                 print("Selected time should be in the future.")
