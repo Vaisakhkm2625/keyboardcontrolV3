@@ -2,6 +2,7 @@ from PyQt6.QtCore import QDateTime, QThread, pyqtSignal
 from PyQt6.QtWidgets import QDateTimeEdit, QVBoxLayout, QWidget
 from plugin_categories.event_plugin import Event
 import sched,time
+from datetime import datetime
 
 class SchedulerWorker(QThread):
 
@@ -15,7 +16,7 @@ class SchedulerWorker(QThread):
         self.scheduler.run()
 
 
-class schedulerUiWidget(QWidget):
+class SchedulerUiWidget(QWidget):
 
     def __init__(self):
         super().__init__(self)
@@ -55,7 +56,7 @@ class schedulerUiWidget(QWidget):
 
 
 
-class schedulerEventPlugin(Event):
+class SchedulerEventPlugin(Event):
     def __init__(self):
         super().__init__()
 
@@ -65,8 +66,7 @@ class schedulerEventPlugin(Event):
         self.worker_thread = SchedulerWorker(self.s)
 
     def get_ui_widget(self):
-        return schedulerEventPlugin 
-
+        return SchedulerUiWidget
 
     # [
     #     {"item":"easyeffects","data":{"scheduled_time":"asfasdfasdf"}},
@@ -83,9 +83,18 @@ class schedulerEventPlugin(Event):
         print("starting keyboard listenr")
 
         current_time = QDateTime.currentDateTime().toPyDateTime()
+
         for scheduled_map in self.schedule_mappings:
             item = scheduled_map["item"]
-            scheduled_time = scheduled_map["data"]["scheduled_time"]
+
+            try:
+                scheduled_time = datetime.strptime(scheduled_map["data"]["scheduled_time"],"%Y-%m-%d %H:%M:%S.%f")
+            except Exception as e:
+                print(f"unable to convert datetime for item {item}")
+                scheduled_time = ""
+
+                continue
+
 
             if scheduled_time <= current_time:
                 print("Selected time should be in the future.")
@@ -95,7 +104,7 @@ class schedulerEventPlugin(Event):
 
             seconds = time_difference.total_seconds()
 
-            self.s.enter(int(seconds), 1, callback, (item))
+            self.s.enter(int(seconds), 1, callback, (item,))
             print(f"Function {item} scheduled to run at: {scheduled_time}")
 
         # Start the worker thread

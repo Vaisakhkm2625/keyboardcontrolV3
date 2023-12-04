@@ -137,20 +137,20 @@ class Manager:
         event_plugin = self.plugin_manager.getPluginByName("scheduler_event", category='Event')
 
 
-        event_plugin.set_data_mappings( id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 05:40:21.461000"}}])
-        event_plugin.start_event_listener(self.read_data)
-        event_plugin.stop_event_listener()
+        event_plugin.plugin_object.set_data_mappings(id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 07:39:15.276000"}}])
+        event_plugin.plugin_object.start_event_listener(self.read_data)
+        event_plugin.plugin_object.stop_event_listener()
 
 
 
 
-    def read_data(self):
-        print("hello from crazy plugin")
+    def read_data(self,item):
+        print(f"hello from plugin {item}")
         pass
 
     def save_data(self):
         pass
-
+        #self.s.enter(int(seconds), 1, callback, (item))
 
 
 class Application(QApplication):
