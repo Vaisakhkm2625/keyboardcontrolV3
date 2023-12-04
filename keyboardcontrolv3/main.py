@@ -1,6 +1,7 @@
 
 # Import statement
 import sys,json
+from time import process_time_ns
 
 from PyQt6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget
 from PyQt6.QtGui import QIcon
@@ -91,6 +92,7 @@ class Manager:
             item_instance = Item(**item_data)
             self.item_list.append(item_instance)
 
+
         self.update_side_bar()
 
 
@@ -136,10 +138,28 @@ class Manager:
 
         event_plugin = self.plugin_manager.getPluginByName("scheduler_event", category='Event')
 
+        #event_plugin.plugin_object.set_data_mappings(id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 07:39:15.276000"}}])
+        event_plugin.plugin_object.set_data_mappings(id_mappings = self.group_by_event("scheduler_event") )
 
-        event_plugin.plugin_object.set_data_mappings(id_mappings = [{"item":"easyeffects","data":{"scheduled_time":"2023-12-04 07:39:15.276000"}}])
         event_plugin.plugin_object.start_event_listener(self.read_data)
         event_plugin.plugin_object.stop_event_listener()
+
+
+
+    def group_by_event(self,event_name):
+
+        return_list = []
+
+        for item in self.item_list: 
+            for event in item.event_list:
+                if event["type"] == event_name:
+                    #print(item.name,":",event["data"])
+                    a = {}
+                    a["item"]=item.name
+                    a["data"] = event["data"]
+                    return_list.append(a)
+
+        return return_list
 
 
 

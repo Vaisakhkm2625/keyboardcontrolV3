@@ -20,9 +20,9 @@
                 }
             },
             {
-                "type": "schedule",
+                "type": "scheduler_event",
                 "data": {
-                    "schedule": "ctrl+j"
+                    "scheduled_time": "2023-12-04 07:39:15.276000"
                 }
             }
         ]
@@ -33,7 +33,33 @@
         "description": "open firefox",
         "action_data": {
             "application_name": "firefox"
-        }
+        },
+        "event_list": [
+            {
+                "type": "keybord_shortcut",
+                "data": {
+                    "shortcut": "ctrl+x"
+                }
+            },
+            {
+                "type": "keybord_shortcut",
+                "data": {
+                    "shortcut": "ctrl+j"
+                }
+            },
+            {
+                "type": "scheduler_event",
+                "data": {
+                    "scheduled_time": "2023-12-04 07:39:15.276000"
+                }
+            },
+            {
+                "type": "scheduler_event",
+                "data": {
+                    "scheduled_time": "2023-12-04 07:39:15.276000"
+                }
+            }
+        ]
     },
     {
         "name": "senthi ",
@@ -41,6 +67,26 @@
         "description": "sent hi with python",
         "action_data": {
             "script_location": "config/sent_hi.py"
-        }
+        },
+        "event_list": [
+            {
+                "type": "keybord_shortcut",
+                "data": {
+                    "shortcut": "ctrl+x"
+                }
+            },
+            {
+                "type": "keybord_shortcut",
+                "data": {
+                    "shortcut": "ctrl+j"
+                }
+            },
+            {
+                "type": "scheduler_event",
+                "data": {
+                    "scheduled_time": "2023-12-04 07:39:15.276000"
+                }
+            }
+        ]
     }
 ]

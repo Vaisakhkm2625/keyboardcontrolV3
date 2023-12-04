@@ -40,8 +40,7 @@ class SchedulerUiWidget(QWidget):
         self.data = data
         #self.date_time_edit.setDateTime(QDateTime.currentDateTime())
 
-        #TODO: fromString(date,*format)
-        self.date_time_edit.setDateTime(QDateTime.fromString(data["scheduled_time"]))
+        self.date_time_edit.setDateTime(QDateTime.fromString(data["scheduled_time"],"%Y-%m-%d %H:%M:%S.%f"))
 
     def datetime_changed(self):
 
@@ -70,9 +69,10 @@ class SchedulerEventPlugin(Event):
 
     # [
     #     {"item":"easyeffects","data":{"scheduled_time":"asfasdfasdf"}},
-    #     {"item":"easyeffects","data":{"scheduled_time":"asfasdfasdf"}},
     #     {"item":"firefox","data":{"scheduled_time":"asfasdfasdf"}},
     # ]
+
+
 
     def set_data_mappings(self, id_mappings = []):
         self.schedule_mappings = id_mappings
@@ -91,6 +91,9 @@ class SchedulerEventPlugin(Event):
                 scheduled_time = datetime.strptime(scheduled_map["data"]["scheduled_time"],"%Y-%m-%d %H:%M:%S.%f")
             except Exception as e:
                 print(f"unable to convert datetime for item {item}")
+                print("-------------------")
+                print(e)
+                print("-------------------")
                 scheduled_time = ""
 
                 continue
