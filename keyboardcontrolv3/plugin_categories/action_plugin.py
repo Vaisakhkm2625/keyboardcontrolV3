@@ -1,6 +1,12 @@
 
 from PyQt6.QtWidgets import QWidget
 
+
+# qwidget returned should have
+# - get_ui_data()
+# - set_ui_data()
+
+
 class Action(object):
 
     def __init__(self):

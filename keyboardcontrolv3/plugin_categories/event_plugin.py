@@ -1,5 +1,10 @@
 from PyQt6.QtWidgets import QWidget
 
+
+# qwidget returned should have
+# - get_ui_data()
+# - set_ui_data()
+
 class Event(object):
 
     def __init__(self):
@@ -9,8 +14,9 @@ class Event(object):
     def get_ui_widget(self):
         return QWidget
 
-    def registor_id_data(self,id,data={}):
-        print("regitored ",id,"with data",data)
+
+    def set_data_mappings(self, id_mappings=[]):
+        print("regitored ",id_mappings)
 
 
     def start_event_listener(self,callback_func):
