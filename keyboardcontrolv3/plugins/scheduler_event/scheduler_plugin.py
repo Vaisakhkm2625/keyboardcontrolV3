@@ -32,8 +32,7 @@ class SchedulerUiWidget(QWidget):
         self.setLayout(self.vbox)
 
     def get_ui_data(self):
-
-        self.data["scheduled_time"]=self.date_time_edit.dateTime().toPyDateTime()
+        self.data["scheduled_time"]= self.date_time_edit.dateTime().toPyDateTime().strftime("%Y-%m-%d %H:%M:%S.%f")
         return self.data
 
     def set_ui_data(self,data):
@@ -80,7 +79,7 @@ class SchedulerEventPlugin(Event):
 
     def start_event_listener(self,callback):
         # keyboard press ed > callback
-        print("starting keyboard listenr")
+        print("starting schduler event listenr")
 
         current_time = QDateTime.currentDateTime().toPyDateTime()
 

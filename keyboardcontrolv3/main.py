@@ -173,6 +173,8 @@ class Manager:
         item.event_list.clear()
         item.event_list=event_list
 
+        self.run_events()
+
 
     def update_side_bar(self):
         self.ui.item_list.clear()
@@ -190,7 +192,7 @@ class Manager:
         self.run_action_by_item(self.get_current_ui_item())
 
 
-        #TODO: Now it's only for scheduler_event
+        # TODO:[x] Now it's only for scheduler_event
         # make this loop through all event with getPluginByCatagory("Event")
     def run_events(self):
 
@@ -206,9 +208,19 @@ class Manager:
             event_plugin.plugin_object.start_event_listener(self.event_callback)
         #event_plugin.plugin_object.stop_event_listener()
 
-    def event_callback(self,item):
-        print(f"hello from plugin {item}")
-        pass
+    def event_callback(self,item_name):
+        logger.info(f"running plugin action {item_name}")
+
+        # TODO:optimize here
+
+        for item in self.item_list:
+            if item.name == item_name:
+                break
+        else:
+            logger.warn(f"item id not found for callback -> {item_name}")
+            item = None
+
+        self.run_action_by_item(item)
 
 
     def group_by_event(self,event_name):
