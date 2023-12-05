@@ -173,6 +173,7 @@ class Manager:
         item.event_list.clear()
         item.event_list=event_list
 
+        #TODO: Not a good idea... atleast stop previous threads
         self.run_events()
 
 
@@ -212,7 +213,6 @@ class Manager:
         logger.info(f"running plugin action {item_name}")
 
         # TODO:optimize here
-
         for item in self.item_list:
             if item.name == item_name:
                 break
