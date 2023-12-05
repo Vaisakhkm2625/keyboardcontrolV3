@@ -1,5 +1,5 @@
 from PyQt6.QtCore import pyqtSignal
-from PyQt6.QtWidgets import QLineEdit, QWidget,QHBoxLayout,QPushButton
+from PyQt6.QtWidgets import QComboBox, QLabel, QLineEdit, QWidget,QVBoxLayout,QPushButton
 from plugin_categories.action_plugin import Action
 import os
 
@@ -12,12 +12,40 @@ class ApplicationUiWidget(QWidget):
         super().__init__()
 
         print("application ui")
-        self.lab = QHBoxLayout()
-        #self.lab.addWidget(QPushButton("Application"))
-        self.application_name = QLineEdit() 
-        self.lab.addWidget(self.application_name)
+        #self.lab = QVBoxLayout()
+        ##self.lab.addWidget(QPushButton("Application"))
+        #self.application_name = QLineEdit() 
 
-        self.setLayout(self.lab)
+        #self.lab.addWidget(QLabel("Application automation"))
+        #self.lab.addWidget(QLabel("Select the application you wanted from the menu below"))
+
+        #self.lab.addWidget(self.application_name)
+        #self.lab.addStretch()
+
+
+        #self.setLayout(self.lab)
+
+        # Create widgets
+        label1 = QLabel("Application Lanuncher")
+        label2 = QLabel("Select the application you want from the menu below")
+        #self.application_name = QComboBox()
+        self.application_name = QLineEdit()
+
+        # Create layout
+        layout = QVBoxLayout()
+        layout.addWidget(label1)
+        layout.addWidget(label2)
+        layout.addWidget(self.application_name)
+        layout.addStretch()
+
+        # Apply styles
+        label1.setStyleSheet("font-size: 18px; font-weight: bold;")
+        label2.setStyleSheet("font-size: 14px; color: #555;")
+        self.application_name.setStyleSheet("padding: 5px; font-size: 14px;")
+
+        # Set layout for the main widget
+        self.setLayout(layout)
+
 
     def set_ui_data(self,data):
         self.data = data

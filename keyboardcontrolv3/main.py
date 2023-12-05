@@ -105,6 +105,10 @@ class Manager:
 
     def item_selected(self,item_row):
         item = self.item_list[item_row]
+
+
+        self.ui.item_name.setText(item.name)
+        self.ui.description.setText(item.description)
         self.set_item_ui_action(item)
         self.set_item_ui_events(item)
 
@@ -274,11 +278,16 @@ class MainWindow(QMainWindow):
 
     themeSignal = pyqtSignal(str)
 
+
+
+
     def __init__(self):
         super().__init__()
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+
 
         #self.ui.apply.clicked.connect(self.run_some)
         self.manager = Manager(self.ui)

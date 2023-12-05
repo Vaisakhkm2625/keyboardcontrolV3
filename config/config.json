@@ -1,6 +1,6 @@
 [
     {
-        "name": "easyeffects",
+        "name": "Easy effects",
         "action_type": "applications",
         "description": "open easyeffects",
         "action_data": {
@@ -28,7 +28,7 @@
         ]
     },
     {
-        "name": "firefox",
+        "name": "Firefox",
         "action_type": "applications",
         "description": "open firefox",
         "action_data": {
@@ -62,7 +62,7 @@
         ]
     },
     {
-        "name": "senthi ",
+        "name": "Sent hi",
         "action_type": "python_scripts",
         "description": "sent hi with python",
         "action_data": {
