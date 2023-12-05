@@ -1,6 +1,7 @@
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QLineEdit, QWidget,QHBoxLayout,QPushButton
 from plugin_categories.action_plugin import Action
+import os
 
 
 class ApplicationUiWidget(QWidget):
@@ -38,6 +39,16 @@ class ApplicationPlugin(Action):
     def run_action(self,data):
         print("running application plugin >",data["application_name"])
 
+
+        application_name = data["application_name"]
+        # Determine the appropriate command based on the platform
+        if os.name == 'nt':  # Windows
+            command = f'start {application_name}'
+        elif os.name == 'posix':  # Linux or macOS
+            command = f'open {application_name}'
+        else:
+            raise NotImplementedError("Unsupported operating system")
+
         import subprocess
-        process = subprocess.Popen(data["application_name"])
+        process = subprocess.Popen(application_name,shell=True)
 
