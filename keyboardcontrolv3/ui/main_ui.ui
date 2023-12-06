@@ -131,6 +131,13 @@
            <item>
             <widget class="QListWidget" name="event_list"/>
            </item>
+           <item>
+            <widget class="QPushButton" name="add_event">
+             <property name="text">
+              <string>Add Event</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </widget>
@@ -242,6 +249,13 @@ font-weight: bold;</string>
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="add_item">
+             <property name="text">
+              <string>Add Item</string>
              </property>
             </widget>
            </item>
