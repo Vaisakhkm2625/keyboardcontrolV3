@@ -1,10 +1,10 @@
 
 # Import statement
 import sys,json
-from time import process_time_ns
+from time import process_time_ns, time
 from PyQt6.QtCore import pyqtSignal
 
-from PyQt6.QtWidgets import QApplication, QHBoxLayout, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget, QMenu
+from PyQt6.QtWidgets import QApplication, QComboBox, QFormLayout, QHBoxLayout, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget, QMenu, QDialog
 from PyQt6.QtGui import QAction, QIcon
 
 from qt_material import QtStyleTools, apply_stylesheet,list_themes
@@ -31,6 +31,58 @@ logger = logging.getLogger("keyboardcontrolv3_logger_inst")
 #logger.addHandler(logging.StreamHandler(sys.stdout))
 logger.setLevel(logging.DEBUG)
 
+
+
+
+class AddItemDialog(QDialog):
+    data_passed_signal = pyqtSignal(Item)
+
+    def __init__(self, parent=None,action_list=[]):
+        super(AddItemDialog, self).__init__(parent)
+
+        flayout = QFormLayout()
+
+        # Add widgets to the dialog
+        self.name_line_edit = QLineEdit()
+        self.description_line_edit = QLineEdit()
+        self.action_combobox = QComboBox()
+
+        for action in action_list:
+            self.action_combobox.addItem(action)
+
+
+        flayout.addRow("Name",self.name_line_edit)
+        flayout.addRow("Description",self.description_line_edit)
+        flayout.addRow("Action",self.action_combobox )
+
+        #layout.addWidget(self.name_line_edit)
+        #layout.addWidget(self.description_line_edit)
+        #action_type 
+        
+        button_ok = QPushButton("OK")
+        button_cancel = QPushButton("Cancel")
+
+        # Connect accept and reject signals to slots
+        button_ok.clicked.connect(self.accept_with_data)
+        button_cancel.clicked.connect(self.reject)
+
+        layout = QVBoxLayout()
+        layout.addLayout(flayout)
+        layout.addWidget(button_ok)
+        layout.addWidget(button_cancel)
+
+        self.setLayout(layout)
+
+    def accept_with_data(self):
+
+        item = Item(self.name_line_edit.text()) 
+        item.description = self.description_line_edit.text()
+        item.action_type = self.action_combobox.currentText()
+
+        self.data_passed_signal.emit(item)
+        self.accept()
+
+
 class Manager:
 
     item_list: list[Item]
@@ -47,10 +99,9 @@ class Manager:
         self.load_items()
 
         self.ui.item_list.currentRowChanged.connect(self.item_selected)
-
         self.ui.tryaction.clicked.connect(self.run_current_item_action)
-
         self.ui.apply.clicked.connect(self.apply_changes)
+        self.ui.add_item.clicked.connect(self.on_add_item_pressed)
 
         self.run_events()
 
@@ -90,6 +141,10 @@ class Manager:
 
         self.update_side_bar()
 
+        #select first item
+        if self.item_list:
+            self.item_selected(0)
+
 
     def read_config(self):
         with open('config/config.json', 'r') as json_file:
@@ -116,9 +171,13 @@ class Manager:
     def set_item_ui_action(self,item: Item):
         action_plugin = self.plugin_manager.getPluginByName(item.action_type, category='Action')
 
-        logger.debug(f"action ui for {item.name}")
+        logger.debug(f"action {action_plugin} ui for {item.name}")
 
-        self.ui.actions_area.widget(action_plugin.ui_index).set_ui_data(item.action_data)
+        try:
+            self.ui.actions_area.widget(action_plugin.ui_index).set_ui_data(item.action_data)
+        except Exception as e:
+            logger.debug(f"unable to set data for action plugin data for item {item.name}")
+
         self.ui.actions_area.setCurrentIndex(action_plugin.ui_index)
 
         ## snippet - for running a plugin with item
@@ -180,6 +239,25 @@ class Manager:
 
         #TODO: Not a good idea... atleast stop previous threads
         self.run_events()
+
+    def on_add_item_pressed(self):
+        action_list = []
+
+        for action_plugin in self.plugin_manager.getPluginsOfCategory("Action"):
+            action_list.append(action_plugin.name)
+
+        add_item_dialog= AddItemDialog(action_list=action_list)
+        add_item_dialog.data_passed_signal.connect(self.add_item)
+        result = add_item_dialog.exec()
+        self.update_side_bar()
+
+    def add_item(self,item: Item):
+        print("item: ",item.name," ",item.description)
+        self.item_list.append(item)
+
+
+
+
 
 
     def update_side_bar(self):
@@ -274,8 +352,6 @@ class Application(QApplication):
 
 class MainWindow(QMainWindow):
 
-    action_plugin_list = []
-
     themeSignal = pyqtSignal(str)
 
 
@@ -325,11 +401,6 @@ class MainWindow(QMainWindow):
         print(f'Selected color: {selected_color}')
         self.themeSignal.emit(selected_color)
 
-
-
-    def run_some(self):
-        self.action_plugin_list[0].plugin_object.run_action()
-        self.action_plugin_list[0].plugin_object.set_data(data={"item":"item1","application_name":"easyeffects"})
 
 
 if __name__ == "__main__":
