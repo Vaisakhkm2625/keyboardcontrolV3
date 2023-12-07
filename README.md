@@ -16,3 +16,37 @@ On Windows
 poetry run python ./keyboardcontrolv3/__init__.py
 
 ```
+---
+
+## TODO
+
+
+- [x] apply button
+    - [x] onclick -> apply data
+
+- [ ] plugins
+
+    - [ ] event plugins
+        - [x] keyboard event plugins
+        - [ ] mouse event plugins
+
+    - [ ] action plugins
+        - [ ] web plugins
+        - [x] application plugins
+        - [x] script run plugin
+            - [ ] beatification remaining 
+
+- [ ] add and remove item button
+    - [x] add event button
+    - [ ] remove event button
+    - [x] add item button
+    - [ ] remove item button
+
+    - [x] popup for making new item
+
+- [ ] errors
+    - [ ] fix keyboard key seq edit not showing
+
+- [ ] ui beatification 
+- [ ] save button
+
