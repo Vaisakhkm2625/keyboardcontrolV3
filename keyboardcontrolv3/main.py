@@ -1,6 +1,7 @@
 
 # Import statement
 import sys,json
+import logging
 from time import process_time_ns, time
 from PyQt6.QtCore import pyqtSignal
 
@@ -15,8 +16,9 @@ from plugin_categories.event_plugin import Event
 
 from ui.main_ui import Ui_MainWindow
 
-import logging
 from item import Item
+from add_item_dialog import AddItemDialog
+from add_event_dialog import AddEventDialog
 
 ### Global variables
 PLUGIN_LOCATION = 'keyboardcontrolv3/plugins'
@@ -34,55 +36,6 @@ logger.setLevel(logging.DEBUG)
 
 
 
-class AddItemDialog(QDialog):
-    data_passed_signal = pyqtSignal(Item)
-
-    def __init__(self, parent=None,action_list=[]):
-        super(AddItemDialog, self).__init__(parent)
-
-        flayout = QFormLayout()
-
-        # Add widgets to the dialog
-        self.name_line_edit = QLineEdit()
-        self.description_line_edit = QLineEdit()
-        self.action_combobox = QComboBox()
-
-        for action in action_list:
-            self.action_combobox.addItem(action)
-
-
-        flayout.addRow("Name",self.name_line_edit)
-        flayout.addRow("Description",self.description_line_edit)
-        flayout.addRow("Action",self.action_combobox )
-
-        #layout.addWidget(self.name_line_edit)
-        #layout.addWidget(self.description_line_edit)
-        #action_type 
-        
-        button_ok = QPushButton("OK")
-        button_cancel = QPushButton("Cancel")
-
-        # Connect accept and reject signals to slots
-        button_ok.clicked.connect(self.accept_with_data)
-        button_cancel.clicked.connect(self.reject)
-
-        layout = QVBoxLayout()
-        layout.addLayout(flayout)
-        layout.addWidget(button_ok)
-        layout.addWidget(button_cancel)
-
-        self.setLayout(layout)
-
-    def accept_with_data(self):
-
-        item = Item(self.name_line_edit.text()) 
-        item.description = self.description_line_edit.text()
-        item.action_type = self.action_combobox.currentText()
-
-        self.data_passed_signal.emit(item)
-        self.accept()
-
-
 class Manager:
 
     item_list: list[Item]
@@ -98,10 +51,11 @@ class Manager:
         self.load_plugins()
         self.load_items()
 
-        self.ui.item_list.currentRowChanged.connect(self.item_selected)
+        self.ui.item_list.currentRowChanged.connect(self.on_item_selected)
         self.ui.tryaction.clicked.connect(self.run_current_item_action)
         self.ui.apply.clicked.connect(self.apply_changes)
         self.ui.add_item.clicked.connect(self.on_add_item_pressed)
+        self.ui.add_event.clicked.connect(self.on_add_event_pressed)
 
         self.run_events()
 
@@ -143,8 +97,8 @@ class Manager:
 
         #select first item
         if self.item_list:
-            self.item_selected(0)
-
+            self.ui.item_list.setCurrentRow(0)
+            self.on_item_selected(0)
 
     def read_config(self):
         with open('config/config.json', 'r') as json_file:
@@ -158,9 +112,8 @@ class Manager:
         #self.s.enter(int(seconds), 1, callback, (item))
 
 
-    def item_selected(self,item_row):
+    def on_item_selected(self,item_row):
         item = self.item_list[item_row]
-
 
         self.ui.item_name.setText(item.name)
         self.ui.description.setText(item.description)
@@ -241,23 +194,37 @@ class Manager:
         self.run_events()
 
     def on_add_item_pressed(self):
-        action_list = []
 
-        for action_plugin in self.plugin_manager.getPluginsOfCategory("Action"):
-            action_list.append(action_plugin.name)
+        action_list = []
+        action_list = [ action_plugin.name for action_plugin in self.plugin_manager.getPluginsOfCategory("Action") ]
 
         add_item_dialog= AddItemDialog(action_list=action_list)
-        add_item_dialog.data_passed_signal.connect(self.add_item)
+        add_item_dialog.data_passed_signal.connect(self.add_item_to_list)
         result = add_item_dialog.exec()
         self.update_side_bar()
 
-    def add_item(self,item: Item):
+    def add_item_to_list(self,item: Item):
         print("item: ",item.name," ",item.description)
         self.item_list.append(item)
 
 
+    def on_add_event_pressed(self):
+        logger.info("add_event_pressed")
+
+        event_plugin_list = []
+        event_plugin_list = [ event_plugin.name for event_plugin in self.plugin_manager.getPluginsOfCategory("Event") ]
+
+        add_event_dialog = AddEventDialog(event_list=event_plugin_list) 
+        add_event_dialog.data_passed_signal.connect(self.add_event_to_curr_item_list)
+        result = add_event_dialog.exec()
 
 
+    def add_event_to_curr_item_list(self,event):
+
+        item = self.get_current_ui_item()
+        logger.debug(f"event is adding to current item -> {item.name}")
+        item.event_list.append(event)
+        self.set_item_ui_events(item)
 
 
     def update_side_bar(self):

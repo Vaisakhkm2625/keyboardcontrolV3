@@ -38,8 +38,11 @@ class SchedulerUiWidget(QWidget):
     def set_ui_data(self,data):
         self.data = data
         #self.date_time_edit.setDateTime(QDateTime.currentDateTime())
-
-        self.date_time_edit.setDateTime(QDateTime.fromString(data["scheduled_time"],"%Y-%m-%d %H:%M:%S.%f"))
+        try:
+            self.date_time_edit.setDateTime(QDateTime.fromString(data["scheduled_time"],"%Y-%m-%d %H:%M:%S.%f"))
+        except Exception as e:
+            print("unable to get scheduled_time error:",e) 
+            self.date_time_edit.setDateTime(QDateTime.currentDateTime())
 
     def datetime_changed(self):
 
