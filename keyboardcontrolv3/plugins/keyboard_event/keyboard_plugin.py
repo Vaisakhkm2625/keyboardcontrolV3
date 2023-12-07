@@ -2,6 +2,8 @@
 from PyQt6.QtWidgets import QKeySequenceEdit, QVBoxLayout, QWidget, QLabel
 from plugin_categories.event_plugin import Event
 import keyboard
+import os
+
 
 from PyQt6.QtGui import QKeySequence
 from PyQt6.QtCore import QThread
@@ -41,8 +43,14 @@ class KeyboardUiWidget(QWidget):
     def set_ui_data(self, data):
         self.data = data
         print("setting keyboard data", self.data)
-        self.label.setText(self.data["shortcut"])
-        self.keyboard_edit.setKeySequence(QKeySequence(self.data["shortcut"]))
+        try:
+            self.label.setText(self.data["shortcut"])
+            self.keyboard_edit.setKeySequence(QKeySequence(self.data["shortcut"]))
+        except Exception as e:
+            print("error: unable to set keybinding ->",e,"<-")
+            self.label.setText("no keybinding")
+            self.keyboard_edit.clear()
+
 
 
 class KeyboardEventPlugin(Event):
@@ -63,11 +71,24 @@ class KeyboardEventPlugin(Event):
         # keyboard press ed > callback
         print("starting keyboard listenr")
 
-        for keymap in self.key_mappings:
-            print(keymap)
-            keyboard.add_hotkey(
-                # keymap["data"]["shortcut"], print, args=('triggered', 'hotkey'))
-                keymap["data"]["shortcut"], callback_func, args=(keymap["item"],))
+
+
+        # Determine the appropriate command based on the platform
+        if os.name == 'nt':  # Windows
+
+            for keymap in self.key_mappings:
+                print(keymap)
+                keyboard.add_hotkey(
+                    # keymap["data"]["shortcut"], print, args=('triggered', 'hotkey'))
+                    keymap["data"]["shortcut"], callback_func, args=(keymap["item"],))
+
+
+        elif os.name == 'posix':  # Linux or macOS
+            print("keyboard plugin need higher privilages to run on linux.. currently not supported")
+        else:
+            raise NotImplementedError("Unsupported operating system")
+
+
 
     def stop_event_listener(self):
         print("stoping keyboard listenr")
