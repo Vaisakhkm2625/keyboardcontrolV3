@@ -50,6 +50,7 @@ class ApplicationUiWidget(QWidget):
     def set_ui_data(self,data):
         self.data = data
         self.application_name.setText(self.data["application_name"])
+            
 
     def get_ui_data(self):
         self.data["application_name"] = self.application_name.text()
