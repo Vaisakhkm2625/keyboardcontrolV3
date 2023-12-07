@@ -10,13 +10,13 @@
             {
                 "type": "keyboard event",
                 "data": {
-                    "shortcut": "ctrl+x"
+                    "shortcut": "ctrl+n"
                 }
             },
             {
                 "type": "keyboard event",
                 "data": {
-                    "shortcut": "ctrl+j"
+                    "shortcut": "ctrl+k"
                 }
             },
             {
