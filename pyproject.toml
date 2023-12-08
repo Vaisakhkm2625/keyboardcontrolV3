@@ -16,6 +16,7 @@ qt-material = "^2.14"
 yapsy = "^1.12.2"
 pyqt6-plugins = {version = "^6.4.2.2.3", platform = "linux"}
 mouse = "^0.7.1"
+moosegesture = "^1.0.2"
 
 
 [build-system]

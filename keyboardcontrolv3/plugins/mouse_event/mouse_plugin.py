@@ -5,6 +5,8 @@ import sys
 import mouse
 import os
 
+import moosegesture
+
 
 from PyQt6.QtCore import QThread
 from PyQt6.QtCore import pyqtSignal
@@ -96,6 +98,7 @@ class MouseEventPlugin(Event):
         super().__init__()
 
         self.mouse_gesture_mappings = []
+        self.mouse_pos = []
 
     def get_ui_widget(self):
         return MouseUiWidget
@@ -105,32 +108,62 @@ class MouseEventPlugin(Event):
         self.mouse_gesture_mappings = id_mappings
         print("mouse_gesture mapping ->", self.mouse_gesture_mappings)
 
+    def find_item_id(self, gesture_sequence, data):
+        print("guestures:", gesture_sequence)
+        for item in data:
+            if "data" in item and "gesture_sequence" in item["data"]:
+                if item["data"]["gesture_sequence"] == gesture_sequence:
+                    return item["item"]
+        return None
+
     def start_event_listener(self, callback_func):
         # keyboard press ed > callback
         print("starting mouse_gesture listener")
 
         # Determine the appropriate command based on the platform
         if os.name == 'nt':  # Windows
+            def on_mouse_event(e):
 
-            for gmap in self.mouse_gesture_mappings:
-                print(gmap)
-                print("added ", gmap)
-                try:
-                    #                keyboard.add_hotkey(
-                    # keymap["data"]["shortcut"], print, args=('triggered', 'hotkey'))
-                    #                        keymap["data"]["shortcut"], callback_func, args=(keymap["item"],))
+                if mouse.is_pressed(button="left"):
 
-                    pass
-                except Exception as e:
-                    print("adding gesture ->",
-                          data["data"]["gesture_sequence"], " failed")
+                    # print(mouse.get_position())
+                    self.mouse_pos.append(mouse.get_position())
+
+                if isinstance(e, mouse.ButtonEvent):
+                    print(e.event_type)
+                    if (e.event_type == "up"):
+                        print("mousepos:", self.mouse_pos)
+                        gesture = moosegesture.getGesture(self.mouse_pos)
+                        print(gesture)
+                        # print(mousepos)
+                        self.mouse_pos.clear()
+
+                        result = self.find_item_id(
+                            gesture, self.mouse_gesture_mappings)
+
+                        if result:
+                            print("result:", result)
+                            callback_func(result)
+                        else:
+                            print("not found")
+
+            mouse.hook(on_mouse_event)
 
         elif os.name == 'posix':  # Linux or macOS
             print(
-                "keyboard plugin need higher privilages to run on linux.. currently not supported")
+                "mouse plugin need higher privilages to run on linux.. currently not supported")
         else:
             raise NotImplementedError("Unsupported operating system")
 
     def stop_event_listener(self):
         print("stopping mouse listener")
+
+        if os.name == 'nt':  # Windows
+            mouse.unhook_all()
+
+        elif os.name == 'posix':  # Linux or macOS
+            print(
+                "mouse plugin need higher privilages to run on linux.. currently not supported")
+        else:
+            raise NotImplementedError("Unsupported operating system")
 

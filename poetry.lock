@@ -126,6 +126,16 @@ files = [
 ]
 
 [[package]]
+name = "moosegesture"
+version = "1.0.2"
+description = "A mouse gesture recognition module for Python."
+optional = false
+python-versions = "*"
+files = [
+    {file = "MooseGesture-1.0.2.tar.gz", hash = "sha256:72dcc56b3a2749e8d72abc77c7d9028222551b3019ac06e08eed9cbd754f2f47"},
+]
+
+[[package]]
 name = "mouse"
 version = "0.7.1"
 description = "Hook and simulate mouse events on Windows and Linux"
@@ -3107,4 +3117,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f3f2cb7bd9cad96e14a00ad1f3b8d41c7feef8a925c9b3b5f05695a7280c6fc4"
+content-hash = "9e79f234d766cd9240607e110f36f496d95120dd08ac00f9a1e16c057f55f4b4"
