@@ -1,5 +1,33 @@
 [
     {
+        "name": "Notepad",
+        "action_type": "applications",
+        "description": "open notepad",
+        "action_data": {
+            "application_name": "notepad"
+        },
+        "event_list": [
+            {
+                "type": "keyboard event",
+                "data": {
+                    "shortcut": "ctrl+n"
+                }
+            },
+            {
+                "type": "keyboard event",
+                "data": {
+                    "shortcut": "ctrl+k"
+                }
+            },
+            {
+                "type": "scheduler_event",
+                "data": {
+                    "scheduled_time": "2023-12-04 07:39:15.276000"
+                }
+            }
+        ]
+    },
+    {
         "name": "Easy effects",
         "action_type": "applications",
         "description": "open easyeffects",

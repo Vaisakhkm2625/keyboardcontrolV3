@@ -23,6 +23,7 @@ from add_event_dialog import AddEventDialog
 
 # Global variables
 PLUGIN_LOCATION = 'keyboardcontrolv3/plugins'
+CONFIG_FILE = "config/config.json"
 
 # Logging setup
 
@@ -109,7 +110,7 @@ class Manager:
             self.select_item(0)
 
     def read_config(self):
-        with open('config/config.json', 'r') as json_file:
+        with open(CONFIG_FILE, 'r') as json_file:
             items_data = json.load(json_file)
             logger.info("Config file loaded")
             return items_data
@@ -129,7 +130,7 @@ class Manager:
             }
             json_data.append(item_data)
 
-        with open('config/configout.json', 'w') as json_file:
+        with open(CONFIG_FILE, 'w') as json_file:
             json.dump(json_data, json_file, indent=4)
 
     def on_item_selected(self, item_row):

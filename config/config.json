@@ -28,34 +28,6 @@
         ]
     },
     {
-        "name": "Easy effects",
-        "action_type": "applications",
-        "description": "open easyeffects",
-        "action_data": {
-            "application_name": "easyeffects"
-        },
-        "event_list": [
-            {
-                "type": "keyboard event",
-                "data": {
-                    "shortcut": "ctrl+x"
-                }
-            },
-            {
-                "type": "keyboard event",
-                "data": {
-                    "shortcut": "ctrl+j"
-                }
-            },
-            {
-                "type": "scheduler_event",
-                "data": {
-                    "scheduled_time": "2023-12-04 07:39:15.276000"
-                }
-            }
-        ]
-    },
-    {
         "name": "Firefox",
         "action_type": "applications",
         "description": "open firefox",
