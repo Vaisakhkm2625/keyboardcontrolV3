@@ -28,7 +28,7 @@ poetry run python ./keyboardcontrolv3/__init__.py
 
     - [ ] event plugins
         - [x] keyboard event plugins
-        - [ ] mouse event plugins
+        - [x] mouse event plugins
 
     - [ ] action plugins
         - [ ] web plugins
@@ -38,9 +38,9 @@ poetry run python ./keyboardcontrolv3/__init__.py
 
 - [ ] add and remove item button
     - [x] add event button
-    - [ ] remove event button
+    - [x] remove event button
     - [x] add item button
-    - [ ] remove item button
+    - [x] remove item button
 
     - [x] popup for making new item
 
