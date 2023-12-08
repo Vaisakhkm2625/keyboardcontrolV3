@@ -63,6 +63,8 @@ class Manager:
         self.ui.actionadd_event.triggered.connect(self.on_add_event_pressed)
         self.ui.actionremove_event.triggered.connect(self.on_remove_event_pressed)
 
+        self.ui.save.pressed.connect(self.save_config)
+
         self.run_events()
 
     def load_plugins(self):
@@ -113,8 +115,22 @@ class Manager:
 
 
     def save_config(self):
-        pass
         #self.s.enter(int(seconds), 1, callback, (item))
+
+        json_data = []
+
+        for item in self.item_list:
+            item_data = {
+                "name": item.name,
+                "action_type": item.action_type,
+                "description": item.description,
+                "action_data": item.action_data,
+                "event_list": item.event_list
+            }
+            json_data.append(item_data)
+
+        with open('config/configout.json', 'w') as json_file:
+            json.dump(json_data,json_file, indent=4)
 
 
     def on_item_selected(self,item_row):

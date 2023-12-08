@@ -263,6 +263,13 @@ font-weight: bold;</string>
          </widget>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="save">
+         <property name="text">
+          <string>Save</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
