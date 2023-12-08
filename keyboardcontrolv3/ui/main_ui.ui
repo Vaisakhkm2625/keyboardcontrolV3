@@ -278,7 +278,37 @@ font-weight: bold;</string>
      <height>19</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuItem">
+    <property name="title">
+     <string>options</string>
+    </property>
+    <addaction name="actionadd_item"/>
+    <addaction name="actionremove_item"/>
+    <addaction name="actionadd_event"/>
+    <addaction name="actionremove_event"/>
+   </widget>
+   <addaction name="menuItem"/>
   </widget>
+  <action name="actionadd_item">
+   <property name="text">
+    <string>add item</string>
+   </property>
+  </action>
+  <action name="actionremove_item">
+   <property name="text">
+    <string>remove item</string>
+   </property>
+  </action>
+  <action name="actionadd_event">
+   <property name="text">
+    <string>add event</string>
+   </property>
+  </action>
+  <action name="actionremove_event">
+   <property name="text">
+    <string>remove event</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

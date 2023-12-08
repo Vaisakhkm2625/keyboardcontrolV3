@@ -57,6 +57,12 @@ class Manager:
         self.ui.add_item.clicked.connect(self.on_add_item_pressed)
         self.ui.add_event.clicked.connect(self.on_add_event_pressed)
 
+        self.ui.actionadd_item.triggered.connect(self.on_add_item_pressed)
+        self.ui.actionremove_item.triggered.connect(self.on_remove_item_pressed)
+
+        self.ui.actionadd_event.triggered.connect(self.on_add_event_pressed)
+        self.ui.actionremove_event.triggered.connect(self.on_remove_event_pressed)
+
         self.run_events()
 
     def load_plugins(self):
@@ -97,8 +103,7 @@ class Manager:
 
         #select first item
         if self.item_list:
-            self.ui.item_list.setCurrentRow(0)
-            self.on_item_selected(0)
+            self.select_item(0)
 
     def read_config(self):
         with open('config/config.json', 'r') as json_file:
@@ -113,7 +118,9 @@ class Manager:
 
 
     def on_item_selected(self,item_row):
+
         item = self.item_list[item_row]
+        print("selected ->",item_row)
 
         self.ui.item_name.setText(item.name)
         self.ui.description.setText(item.description)
@@ -207,6 +214,31 @@ class Manager:
         print("item: ",item.name," ",item.description)
         self.item_list.append(item)
 
+    def select_item(self,item_row):
+        self.ui.item_list.setCurrentRow(item_row)
+        self.on_item_selected(item_row)
+
+
+    def on_remove_item_pressed(self):
+
+        if len(self.item_list) > 1:
+
+            item = self.get_current_ui_item()
+            itemRow = self.ui.item_list.currentRow()
+
+            self.item_list.remove(item)
+            self.update_side_bar()
+            self.select_item(itemRow-1)
+
+
+        else:
+            #TODO: make a ui to show this
+            print("atleast one item is needed")
+
+
+
+
+
 
     def on_add_event_pressed(self):
         logger.info("add_event_pressed")
@@ -225,6 +257,15 @@ class Manager:
         logger.debug(f"event is adding to current item -> {item.name}")
         item.event_list.append(event)
         self.set_item_ui_events(item)
+
+
+    def on_remove_event_pressed(self):
+
+        item = self.get_current_ui_item()
+        item.event_list.pop(self.ui.event_list.currentRow())
+        self.set_item_ui_events(item)
+        
+
 
 
     def update_side_bar(self):
@@ -361,6 +402,8 @@ class MainWindow(QMainWindow):
 
         # Add the color menu to the main menu bar
         menubar.addMenu(color_menu)
+
+
 
     def colorSelected(self):
         # Get the text of the triggered action (color)
