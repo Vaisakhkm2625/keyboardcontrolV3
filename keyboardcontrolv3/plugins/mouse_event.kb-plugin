@@ -1,0 +1,8 @@
+[Core]
+Name = mouse event
+Module = mouse_event
+
+[Documentation]
+Author = Vaisakh
+Version = 0.1
+Description = plugin to mouse guesture event trigger
