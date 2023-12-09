@@ -6,7 +6,7 @@ import os
 
 
 from PyQt6.QtGui import QKeySequence
-from PyQt6.QtCore import QThread
+from PyQt6.QtCore import QThread, Qt
 from PyQt6.QtCore import pyqtSignal
 
 
@@ -26,11 +26,13 @@ class KeyboardUiWidget(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.vbox = QVBoxLayout()
         self.data = {}
-        self.keyboard_edit = QKeySequenceEdit()
+        self.keyboard_edit = QKeySequenceEdit(QKeySequence(Qt.Key.Key_K))
+        self.keyboard_edit.setVisible(True)
+
         self.label = QLabel()
 
-        self.vbox = QVBoxLayout()
         self.vbox.addWidget(self.label)
         self.vbox.addWidget(self.keyboard_edit)
 
@@ -45,12 +47,11 @@ class KeyboardUiWidget(QWidget):
         print("setting keyboard data", self.data)
         try:
             self.label.setText(self.data["shortcut"])
-            self.keyboard_edit.setKeySequence(
-                QKeySequence(self.data["shortcut"]))
+            #self.keyboard_edit.setKeySequence(QKeySequence(self.data["shortcut"]))
         except Exception as e:
             print("error: unable to set keybinding ->", e, "<-")
             self.label.setText("no keybinding")
-            self.keyboard_edit.clear()
+            #self.keyboard_edit.clear()
 
 
 class KeyboardEventPlugin(Event):

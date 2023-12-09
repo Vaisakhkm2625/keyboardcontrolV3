@@ -10,19 +10,28 @@
             {
                 "type": "keyboard event",
                 "data": {
-                    "shortcut": "ctrl+n"
+                    "shortcut": "Ctrl+N"
                 }
             },
             {
                 "type": "keyboard event",
                 "data": {
-                    "shortcut": "ctrl+k"
+                    "shortcut": "Ctrl+K"
                 }
             },
             {
                 "type": "scheduler_event",
                 "data": {
-                    "scheduled_time": "2023-12-04 07:39:15.276000"
+                    "scheduled_time": "2023-12-09 01:47:30.927000"
+                }
+            },
+            {
+                "type": "mouse event",
+                "data": {
+                    "gesture_sequence": [
+                        "DR",
+                        "UR"
+                    ]
                 }
             }
         ]
@@ -85,6 +94,25 @@
                 "type": "scheduler_event",
                 "data": {
                     "scheduled_time": "2023-12-04 07:39:15.276000"
+                }
+            }
+        ]
+    },
+    {
+        "name": "web hello",
+        "action_type": "web inject",
+        "description": "get a hello alert from web",
+        "action_data": {
+            "js_file_path": "C:/Users/vaisakh/Desktop/testpy/hello.js"
+        },
+        "event_list": [
+            {
+                "type": "mouse event",
+                "data": {
+                    "gesture_sequence": [
+                        "U",
+                        "D"
+                    ]
                 }
             }
         ]

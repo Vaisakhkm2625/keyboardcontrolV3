@@ -6,7 +6,7 @@ import logging
 from time import process_time_ns, time
 from PyQt6.QtCore import pyqtSignal
 
-from PyQt6.QtWidgets import QApplication, QComboBox, QFormLayout, QHBoxLayout, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget, QMenu, QDialog
+from PyQt6.QtWidgets import QApplication, QComboBox, QFormLayout, QHBoxLayout, QSystemTrayIcon, QVBoxLayout, QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QPushButton, QWidget, QMenu, QDialog
 from PyQt6.QtGui import QAction, QIcon
 
 from qt_material import QtStyleTools, apply_stylesheet, list_themes
@@ -364,6 +364,31 @@ class Application(QApplication):
         apply_stylesheet(self, theme=theme,
                          invert_secondary=True, extra=self.extra)
 
+class SystemTray(QSystemTrayIcon):
+    def __init__(self, parent=None):
+        super(SystemTray, self).__init__(parent)
+
+        icon= QIcon("keyboardcontrolv3/assets/keyboard.png")
+
+        self.setIcon(icon)
+
+        #self.setIcon(self.style().standardIcon(QSystemTrayIcon.Information))
+        self.setToolTip("My PyQt System Tray")
+        self.setVisible(True)
+
+        # Create a context menu
+        self.context_menu = QMenu()
+        quit_action = QAction("Quit", self)
+        quit_action.triggered.connect(self.quit_application)
+        self.context_menu.addAction(quit_action)
+
+        # Set the context menu to the system tray
+        self.setContextMenu(self.context_menu)
+
+    def quit_application(self):
+        QApplication.instance().quit()
+
+
 
 class MainWindow(QMainWindow):
 
@@ -378,6 +403,10 @@ class MainWindow(QMainWindow):
         # self.ui.apply.clicked.connect(self.run_some)
         self.manager = Manager(self.ui)
         self.add_style_menu()
+
+
+        self.system_tray = SystemTray(self)
+
 
     def add_style_menu(self):
         # Create the main menu bar
@@ -411,6 +440,10 @@ class MainWindow(QMainWindow):
         print(f'Selected color: {selected_color}')
         self.themeSignal.emit(selected_color)
 
+    def closeEvent(self, event):
+        # Hide the main window and show the system tray icon when closed
+        event.ignore()
+        self.hide()
 
 if __name__ == "__main__":
     app = Application(sys.argv)
