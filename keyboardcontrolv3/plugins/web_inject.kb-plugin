@@ -1,0 +1,8 @@
+[Core]
+Name = web inject
+Module = webinject
+
+[Documentation]
+Author = Vaisakh
+Version = 0.1
+Description = plugin for injecting js to a website 
