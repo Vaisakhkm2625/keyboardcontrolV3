@@ -357,7 +357,7 @@ class Application(QApplication):
             'color': 'white',
         }
 
-        apply_stylesheet(self, theme="dark_teal.xml")
+        apply_stylesheet(self, theme="light_red.xml")
 
     def apply_theme(self, theme):
 
@@ -365,8 +365,10 @@ class Application(QApplication):
                          invert_secondary=True, extra=self.extra)
 
 class SystemTray(QSystemTrayIcon):
-    def __init__(self, parent=None):
+    def __init__(self,main_window, parent=None):
         super(SystemTray, self).__init__(parent)
+
+        self.main_window = main_window
 
         icon= QIcon("keyboardcontrolv3/assets/keyboard.png")
 
@@ -388,7 +390,10 @@ class SystemTray(QSystemTrayIcon):
     def quit_application(self):
         QApplication.instance().quit()
 
-
+    def tray_activated(self, reason):
+        print("tray activeed")
+        if reason == QSystemTrayIcon.ActivationReason.Trigger or reason == QSystemTrayIcon.ActivationReason.DoubleClick:
+            self.main_window.show()
 
 class MainWindow(QMainWindow):
 
@@ -442,8 +447,9 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         # Hide the main window and show the system tray icon when closed
-        event.ignore()
-        self.hide()
+        #event.ignore()
+        #self.hide()
+        pass
 
 if __name__ == "__main__":
     app = Application(sys.argv)

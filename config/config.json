@@ -114,6 +114,12 @@
                         "D"
                     ]
                 }
+            },
+            {
+                "type": "keyboard event",
+                "data": {
+                    "shortcut": "Ctrl+J"
+                }
             }
         ]
     }

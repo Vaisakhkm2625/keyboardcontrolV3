@@ -1,5 +1,5 @@
 
-from PyQt6.QtWidgets import QKeySequenceEdit, QVBoxLayout, QWidget, QLabel
+from PyQt6.QtWidgets import QKeySequenceEdit, QLineEdit, QVBoxLayout, QWidget, QLabel
 from plugin_categories.event_plugin import Event
 import keyboard
 import os
@@ -28,18 +28,21 @@ class KeyboardUiWidget(QWidget):
         super().__init__()
         self.vbox = QVBoxLayout()
         self.data = {}
-        self.keyboard_edit = QKeySequenceEdit(QKeySequence(Qt.Key.Key_K))
-        self.keyboard_edit.setVisible(True)
 
         self.label = QLabel()
+        #self.keyboard_edit = QKeySequenceEdit(QKeySequence(Qt.Key.Key_K))
+        self.keyboard_edit = QLineEdit()
+        #self.keyboard_edit.setVisible(True)
+
 
         self.vbox.addWidget(self.label)
-        self.vbox.addWidget(self.keyboard_edit)
+        #self.vbox.addWidget(self.keyboard_edit)
 
         self.setLayout(self.vbox)
 
     def get_ui_data(self):
-        self.data["shortcut"] = self.keyboard_edit.keySequence().toString()
+        #self.data["shortcut"] = self.keyboard_edit.keySequence().toString()
+        self.data["shortcut"] = self.keyboard_edit.text()
         return self.data
 
     def set_ui_data(self, data):
@@ -48,9 +51,11 @@ class KeyboardUiWidget(QWidget):
         try:
             self.label.setText(self.data["shortcut"])
             #self.keyboard_edit.setKeySequence(QKeySequence(self.data["shortcut"]))
+            #self.keyboard_edit.setText(self.data["shortcut"])
         except Exception as e:
             print("error: unable to set keybinding ->", e, "<-")
-            self.label.setText("no keybinding")
+            #self.label.setText("no keybinding")
+            #self.keyboard_edit.clear()
             #self.keyboard_edit.clear()
 
 
@@ -80,7 +85,7 @@ class KeyboardEventPlugin(Event):
                 try:
                     keyboard.add_hotkey(
                         # keymap["data"]["shortcut"], print, args=('triggered', 'hotkey'))
-                        keymap["data"]["shortcut"], callback_func, args=(keymap["item"],))
+                        keymap["data"]["shortcut"], callback_func, args=(keymap["item"],),suppress=True)
                 except Exception as e:
                     print("adding hotkey ->",
                           keymap["data"]["shortcut"], " failed")
